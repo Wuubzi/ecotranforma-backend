@@ -1,4 +1,5 @@
-import { Model } from 'sequelize-typescript';
+import { CreationOptional } from 'sequelize';
+import { HasMany, Model } from 'sequelize-typescript';
 
 import {
   AllowNull,
@@ -9,13 +10,14 @@ import {
   Table,
   Unique,
 } from 'sequelize-typescript';
+import { Deposit } from 'src/deposit/models/Deposit';
 
 @Table
 export class User extends Model<User> {
   @PrimaryKey
   @AutoIncrement
   @Column(DataType.INTEGER)
-  id_user: number;
+  id_user: CreationOptional<number>;
 
   @AllowNull(false)
   @Column(DataType.STRING)
@@ -31,7 +33,7 @@ export class User extends Model<User> {
   password: string;
 
   @Column({
-    type: DataType.NUMBER,
+    type: DataType.INTEGER,
     defaultValue: 0,
   })
   points: number;
@@ -41,4 +43,7 @@ export class User extends Model<User> {
     defaultValue: 'usuario',
   })
   rol: string;
+
+  @HasMany(() => Deposit)
+  deposits: Deposit[];
 }

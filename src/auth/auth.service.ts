@@ -61,6 +61,40 @@ export class AuthService {
     };
   }
 
+  async validateAdmin(data: Login): Promise<any> {
+    const { email, password } = data;
+
+    if (!email || !password) {
+      throw new UnauthorizedException('Correo y contraseña son requeridos');
+    }
+
+    const user = await this.userModel.findOne({ where: { email } });
+
+    if (!user || !user.dataValues.password) {
+      throw new UnauthorizedException('Credenciales inválidas');
+    }
+
+    const isMatch = await bcrypt.compare(password, user.dataValues.password);
+    if (!isMatch) {
+      throw new UnauthorizedException('Contraseña incorrecta');
+    }
+
+    if (user.dataValues.rol !== 'admin') {
+      throw new UnauthorizedException('Acceso restringido a administradores');
+    }
+
+    const { password: _, ...result } = user['dataValues'];
+    return result;
+  }
+
+  loginAdmin(data: User) {
+    const payload = { sub: data.id_user, email: data.email, role: data.rol };
+    return {
+      access_token: this.jwtService.sign(payload),
+      data,
+    };
+  }
+
   async register(data: RegisterDTO): Promise<User> {
     const isExisting = await this.userModel.findOne({
       where: { email: data.email },

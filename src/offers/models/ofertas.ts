@@ -6,7 +6,9 @@ import {
   PrimaryKey,
   Table,
   Model,
+  HasMany,
 } from 'sequelize-typescript';
+import { UserRedeemedOffers } from './redeem_oferta';
 
 @Table
 export class offers extends Model<offers> {
@@ -27,4 +29,8 @@ export class offers extends Model<offers> {
   @AllowNull(false)
   @Column
   category: string;
+
+  // Relación con las ofertas canjeadas
+  @HasMany(() => UserRedeemedOffers)
+  redeemedOffers: UserRedeemedOffers[];
 }

@@ -58,4 +58,12 @@ export class LandingService {
         '¡Solicitud recibida! Estamos revisando las necesidades de tu comunidad para asignar actividades que generen un impacto positivo. Te mantendremos informado. 🏘️💚',
     };
   }
+
+  async get_voluntarios() {
+    return await this.voluntariosModel.findAll();
+  }
+
+  async get_actividades() {
+    return await this.actividadesModel.findAll();
+  }
 }

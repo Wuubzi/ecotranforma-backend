@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, Put, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Post,
+  Put,
+  Query,
+} from '@nestjs/common';
 import { OffersService } from './offers.service';
 import { OfferDTO } from './dto/offers';
 
@@ -6,8 +14,18 @@ import { OfferDTO } from './dto/offers';
 export class OffersController {
   constructor(private readonly offersService: OffersService) {}
   @Get('get-offers')
-  get_offers() {
-    return this.offersService.get_offers();
+  get_offers(@Query('id_user') id_user: number) {
+    return this.offersService.get_offers(id_user);
+  }
+
+  @Get('get-all-offers')
+  get_all_offers() {
+    return this.offersService.get_all_offers();
+  }
+
+  @Get('get-offers-redeem')
+  get_offers_redeem(@Query('id_user') id_user: number) {
+    return this.offersService.get_user_redeemed_offers(id_user);
   }
 
   @Get('get-offer')
@@ -26,5 +44,10 @@ export class OffersController {
   @Post('add-offers')
   add_offer(@Body() dto: OfferDTO) {
     return this.offersService.add_offer(dto);
+  }
+
+  @Delete('delete-offer')
+  delete_offer(@Query('id_offer') id_offer: number) {
+    return this.offersService.delete_offer(id_offer);
   }
 }

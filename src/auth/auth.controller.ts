@@ -17,6 +17,11 @@ export class AuthController {
     const user = await this.authService.validateUser(dto);
     return this.authService.login(user);
   }
+  @Post('login-admin')
+  async loginAdmin(@Body() dto: Login) {
+    const user = await this.authService.validateAdmin(dto);
+    return this.authService.loginAdmin(user);
+  }
 
   @Post('register')
   register(@Body() dto: RegisterDTO) {
